@@ -74,8 +74,8 @@ reasons under [Performance](#performance).
 | 5 | **Animated background** — drifting gradient wash | throttled 2D canvas, blurred up from a small buffer |
 | 6 | **Hover** — cursor-following spotlight on the capability cards | two CSS custom properties written in a rAF |
 
-Plus the charts that draw themselves, the counters, the keyword highlight that
-wipes in, and the trust marquee — all CSS.
+Plus the charts that draw themselves, the counters, and the trust marquee — all
+CSS.
 
 ### The command centre
 
@@ -110,6 +110,12 @@ that emits a `data-reveal` attribute. One `IntersectionObserver` mounted at the
 root toggles a single class, and CSS does the transition — then unobserves. An
 earlier Motion-based version wrapped ~30 elements in client components; this one
 ships zero JS per reveal.
+
+The whole reveal block is gated on `@media (scripting: enabled)`, so with
+JavaScript off the rules never match and the page renders fully visible instead
+of blank. That used to be a `data-js` attribute stamped onto `<html>` by an
+inline script — which was itself a hydration mismatch, since React then found
+markup it had not rendered. The media query needs no script and no exception.
 
 **The LCP element is never gated behind a reveal.** The hero's KPI numbers were
 briefly wrapped in a scroll-reveal with a stagger delay, which pinned LCP to

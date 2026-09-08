@@ -210,7 +210,7 @@ export function MetaAdsConsole({ children }: { children: ReactNode }) {
 
           <h2 className="u-balance mt-5 text-headline text-ink">
             We design <span className="u-accent-text">Meta Ads</span> that turn
-            attention into <span className="u-mark">business growth</span>.
+            attention into business growth.
           </h2>
 
           <p className="u-pretty mx-auto mt-6 max-w-[46ch] text-lede text-body">
@@ -316,13 +316,13 @@ export function MetaAdsConsole({ children }: { children: ReactNode }) {
               className="relative rounded-[22px] border border-line bg-white p-1.5 shadow-[0_2px_4px_rgba(11,13,18,0.04),0_30px_70px_-30px_rgba(11,13,18,0.28)]"
             >
               {/* Window chrome */}
-              <div className="flex items-center gap-2 px-3 py-2">
+              <div className="relative flex items-center px-3 py-2">
                 <span className="flex gap-1.5" aria-hidden="true">
                   <span className="size-2.5 rounded-full bg-[#ff5f57]" />
                   <span className="size-2.5 rounded-full bg-[#febc2e]" />
                   <span className="size-2.5 rounded-full bg-[#28c840]" />
                 </span>
-                <span className="mx-auto rounded-md bg-surface px-3 py-1 text-[11px] font-medium text-muted">
+                <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-surface px-3 py-1 text-[11px] font-medium text-muted">
                   digilabss · campaign intelligence
                 </span>
               </div>
@@ -370,7 +370,7 @@ export function MetaAdsConsole({ children }: { children: ReactNode }) {
         <div data-reveal="" className="mx-auto mt-16 max-w-[44rem] text-center sm:mt-20">
           <p className="u-balance text-title text-ink">
             Don&rsquo;t just run ads. Build campaigns that{" "}
-            <span className="u-mark">grow your business</span>.
+            grow your business.
           </p>
         </div>
       </div>

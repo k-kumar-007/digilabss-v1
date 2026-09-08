@@ -73,7 +73,7 @@ export function DashboardCanvas() {
       {/* ---------------------------------------------------------------- */}
       {/*  Chrome                                                          */}
       {/* ---------------------------------------------------------------- */}
-      <div className="mb-3 flex flex-wrap items-center gap-2 sm:gap-3">
+      <div className="mb-3 flex items-center gap-2 sm:gap-3">
         <div className="flex items-center gap-2">
           <span className="grid size-7 place-items-center rounded-lg bg-ink text-white">
             <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
@@ -87,11 +87,6 @@ export function DashboardCanvas() {
             <p className="text-[11px] text-muted">Aug 1 – Aug 31, 2025 · All campaigns</p>
           </div>
         </div>
-
-        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-[#bfe9da] bg-[#e4f7f1] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#076b50]">
-          <span className="a-live size-1.5 rounded-full bg-[#0fb185]" />
-          Live
-        </span>
       </div>
 
       {/* ---------------------------------------------------------------- */}

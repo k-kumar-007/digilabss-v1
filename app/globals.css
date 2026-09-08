@@ -139,9 +139,8 @@
   }
 
   /* --- Keyword emphasis ---------------------------------------------------
-     Two devices, used sparingly, so emphasis still means something:
-       .u-accent-text  gradient fill for the one word that carries the claim
-       .u-mark         a soft highlight swash that wipes in on reveal
+     One device only: a gradient fill on the phrase that carries the claim.
+     Emphasis elsewhere comes from weight and colour, not decoration.
   ------------------------------------------------------------------------ */
   .u-accent-text {
     background-image: linear-gradient(
@@ -153,24 +152,6 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-  }
-
-  .u-mark {
-    position: relative;
-    display: inline;
-    background-image: linear-gradient(
-      180deg,
-      transparent 58%,
-      color-mix(in oklab, var(--color-accent) 20%, transparent) 58%
-    );
-    background-repeat: no-repeat;
-    background-size: 0% 100%;
-    transition: background-size 0.9s var(--ease-out-expo) 0.25s;
-  }
-
-  .is-visible .u-mark,
-  [data-reveal].is-visible.u-mark {
-    background-size: 100% 100%;
   }
 
   /* Small caps label sitting above a headline. */
@@ -287,23 +268,6 @@
   animation: marquee var(--marquee-duration, 42s) linear infinite;
 }
 
-/* Soft pulse for the "live" dot in the dashboard chrome. */
-@keyframes live-pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.45;
-    transform: scale(0.82);
-  }
-}
-
-.a-live {
-  animation: live-pulse 2.2s ease-in-out infinite;
-}
-
 /* ---------------------------------------------------------------------------
    Scroll reveals.
 
@@ -313,79 +277,89 @@
    deliberately no blur here (unlike the hero): blurring thirty elements at once
    is the kind of thing that quietly costs ten PageSpeed points on a phone.
 
-   Everything is gated behind `[data-js]`, set by a tiny inline script in the
-   document head. Without JavaScript the attribute is never added, the rules
-   below never match, and the page renders fully visible instead of blank.
+   The whole block is gated on `@media (scripting: enabled)` so that with
+   JavaScript off the rules never match and the page renders fully visible
+   rather than blank.
+
+   This used to be a `[data-js]` attribute set by an inline script in the head,
+   which was the source of a hydration mismatch: the script stamped an attribute
+   onto <html> before React hydrated, and React then found markup it had not
+   rendered. The media query needs no attribute, no script, and no exception —
+   it is the feature CSS has for exactly this question. Browsers without it
+   (pre-2024) simply show the content unanimated, which is the correct fallback.
 --------------------------------------------------------------------------- */
-[data-js] [data-reveal] {
-  opacity: 0;
-  transform: translate3d(0, 26px, 0);
-  transition:
-    opacity 0.8s var(--ease-out-expo),
-    transform 0.8s var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-}
+@media (scripting: enabled) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+    transition:
+      opacity 0.8s var(--ease-out-expo),
+      transform 0.8s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
 
-[data-js] [data-reveal].is-visible {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-}
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 
-/* Staggered children — the ramp is CSS, so nothing threads an index in props. */
-[data-js] [data-reveal-group] > [data-reveal]:nth-child(2) { --reveal-delay: 80ms; }
-[data-js] [data-reveal-group] > [data-reveal]:nth-child(3) { --reveal-delay: 160ms; }
-[data-js] [data-reveal-group] > [data-reveal]:nth-child(4) { --reveal-delay: 240ms; }
-[data-js] [data-reveal-group] > [data-reveal]:nth-child(5) { --reveal-delay: 320ms; }
-[data-js] [data-reveal-group] > [data-reveal]:nth-child(6) { --reveal-delay: 400ms; }
+  /* Staggered children — the ramp is CSS, so nothing threads an index in props. */
+  [data-reveal-group] > [data-reveal]:nth-child(2) { --reveal-delay: 80ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(3) { --reveal-delay: 160ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(4) { --reveal-delay: 240ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(5) { --reveal-delay: 320ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(6) { --reveal-delay: 400ms; }
 
-/* `[data-reveal-trigger]` fires its descendants without animating itself —
-   used where an ancestor already owns the entrance. */
+  /* `[data-reveal-trigger]` fires its descendants without animating itself —
+     used where an ancestor already owns the entrance. */
 
-[data-js] [data-reveal-tile] {
-  opacity: 0;
-  transform: scale(0.92);
-  transition:
-    opacity 0.55s var(--ease-out-expo),
-    transform 0.55s var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-}
+  [data-reveal-tile] {
+    opacity: 0;
+    transform: scale(0.92);
+    transition:
+      opacity 0.55s var(--ease-out-expo),
+      transform 0.55s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
 
-[data-js] .is-visible [data-reveal-tile] {
-  opacity: 1;
-  transform: scale(1);
-}
+  .is-visible [data-reveal-tile] {
+    opacity: 1;
+    transform: scale(1);
+  }
 
-[data-js] [data-reveal-bar] {
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 0.7s var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-}
+  [data-reveal-bar] {
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.7s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
 
-[data-js] .is-visible [data-reveal-bar] {
-  transform: scaleY(1);
-}
+  .is-visible [data-reveal-bar] {
+    transform: scaleY(1);
+  }
 
-/* SVG line that draws itself. `pathLength="1"` normalises the dash maths. */
-[data-js] [data-reveal-draw] {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 1.6s var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-}
+  /* SVG line that draws itself. `pathLength="1"` normalises the dash maths. */
+  [data-reveal-draw] {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.6s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
 
-[data-js] .is-visible [data-reveal-draw] {
-  stroke-dashoffset: 0;
-}
+  .is-visible [data-reveal-draw] {
+    stroke-dashoffset: 0;
+  }
 
-[data-js] [data-reveal-fade] {
-  opacity: 0;
-  transition: opacity 1s var(--ease-out-quint);
-  transition-delay: var(--reveal-delay, 0ms);
-}
+  [data-reveal-fade] {
+    opacity: 0;
+    transition: opacity 1s var(--ease-out-quint);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
 
-[data-js] .is-visible [data-reveal-fade] {
-  opacity: 1;
+  .is-visible [data-reveal-fade] {
+    opacity: 1;
+  }
+
 }
 
 /* ---------------------------------------------------------------------------
@@ -471,21 +445,17 @@
 
   .a-rise,
   .a-fade,
-  [data-js] [data-reveal],
-  [data-js] [data-reveal-tile],
-  [data-js] [data-reveal-bar],
-  [data-js] [data-reveal-fade] {
+  [data-reveal],
+  [data-reveal-tile],
+  [data-reveal-bar],
+  [data-reveal-fade] {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
   }
 
-  [data-js] [data-reveal-draw] {
+  [data-reveal-draw] {
     stroke-dashoffset: 0 !important;
-  }
-
-  .u-mark {
-    background-size: 100% 100% !important;
   }
 
   [data-console][data-armed="true"] [data-panel],

@@ -16,7 +16,7 @@ export function Stats() {
         <Reveal>
           <p className="u-eyebrow">The numbers</p>
           <h2 className="u-balance mt-4 max-w-[13ch] text-headline text-ink">
-            <span className="u-mark">Proof</span>, before promises.
+            Proof, before promises.
           </h2>
         </Reveal>
 

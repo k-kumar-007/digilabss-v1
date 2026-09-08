@@ -117,7 +117,7 @@ export function BookACall() {
         <Reveal>
           <p className="u-eyebrow">Book a call</p>
           <h2 className="u-balance mt-4 max-w-[14ch] text-headline text-ink">
-            Start with the <span className="u-mark">free audit</span>.
+            Start with the free audit.
           </h2>
           <p className="u-pretty mt-6 max-w-[42ch] text-lede text-body">
             Thirty minutes, your account open on the screen. You leave with the

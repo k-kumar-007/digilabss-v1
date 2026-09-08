@@ -41,7 +41,7 @@ export function Proof() {
         <Reveal>
           <p className="u-eyebrow">Selected work</p>
           <h2 className="u-balance mt-4 max-w-[16ch] text-headline text-ink">
-            What it looks like <span className="u-mark">in practice</span>.
+            What it looks like in practice.
           </h2>
         </Reveal>
 

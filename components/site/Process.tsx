@@ -29,7 +29,7 @@ export function Process() {
         <Reveal>
           <p className="u-eyebrow">How to start</p>
           <h2 className="u-balance mt-4 max-w-[14ch] text-headline text-ink">
-            Three weeks to a <span className="u-mark">decision</span>.
+            Three weeks to a decision.
           </h2>
         </Reveal>
 
