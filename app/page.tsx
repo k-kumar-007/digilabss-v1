@@ -1,12 +1,8 @@
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { TrustBar } from "@/components/site/TrustBar";
-import { Story } from "@/components/site/Story";
-import {
-  CompoundingVisual,
-  CreativeVolumeVisual,
-  SignalVisual,
-} from "@/components/visuals/StoryVisuals";
+import { MetaAdsConsole } from "@/components/site/MetaAdsConsole";
+import { DashboardCanvas } from "@/components/visuals/dashboard/DashboardCanvas";
 import { Stats } from "@/components/site/Stats";
 import { Capabilities } from "@/components/site/Capabilities";
 import { Proof } from "@/components/site/Proof";
@@ -18,10 +14,9 @@ import { StickyCTA } from "@/components/site/StickyCTA";
 /**
  * One page, one scroll.
  *
- * The order is the argument: what it is (hero, approach) → why it matters
- * (numbers) → what you get (capabilities) → proof (work) → how to start
- * (process) → the ask (form). Surfaces alternate dark/light so the story reads
- * as chapters rather than a stack of unrelated blocks.
+ * The order is the argument: the claim (hero) → how we actually work, shown
+ * rather than told (the command centre) → the numbers → what you get → proof →
+ * how to start → the ask.
  */
 export default function Page() {
   return (
@@ -30,15 +25,16 @@ export default function Page() {
       <main>
         <Hero />
         <TrustBar />
-        {/* The panels are rendered here, on the server, and handed to the
-            client scroll shell as slots. */}
-        <Story
-          visuals={[
-            <CreativeVolumeVisual key="creative" />,
-            <SignalVisual key="signal" />,
-            <CompoundingVisual key="compounding" />,
-          ]}
-        />
+
+        {/*
+          The dashboard is rendered here, on the server, and handed to the
+          client animation shell as children — so twelve animated panels cost
+          nothing in the JS bundle.
+        */}
+        <MetaAdsConsole>
+          <DashboardCanvas />
+        </MetaAdsConsole>
+
         <Stats />
         <Capabilities />
         <Proof />

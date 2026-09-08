@@ -39,12 +39,12 @@ const CAPABILITIES = [
 /** "What you get" — six tiles, one line each. The hover spotlight is the motion. */
 export function Capabilities() {
   return (
-    <section id="capabilities" data-nav-theme="dark" className="relative bg-ink py-24 sm:py-32">
+    <section id="capabilities" data-nav-theme="light" className="relative bg-surface py-24 sm:py-32">
       <div className="u-shell">
-        <Reveal className="max-w-[24ch]">
-          <p className="text-eyebrow uppercase text-white/55">What you get</p>
-          <h2 className="u-balance mt-4 text-headline text-white">
-            One team. The whole engine.
+        <Reveal>
+          <p className="u-eyebrow">What you get</p>
+          <h2 className="u-balance mt-4 max-w-[15ch] text-headline text-ink">
+            One team. The whole <span className="u-mark">growth engine</span>.
           </h2>
         </Reveal>
 
@@ -53,7 +53,7 @@ export function Capabilities() {
             <RevealItem key={capability.title}>
               <SpotlightCard className="h-full">
                 <div className="flex h-full flex-col p-7">
-                  <span className="grid size-10 place-items-center rounded-xl bg-white/[0.06] text-[#2997ff] ring-1 ring-inset ring-white/10">
+                  <span className="grid size-10 place-items-center rounded-xl bg-accent-soft text-accent-ink ring-1 ring-inset ring-accent-line">
                     <svg
                       viewBox="0 0 24 24"
                       className="size-[18px]"
@@ -67,8 +67,8 @@ export function Capabilities() {
                       {capability.icon}
                     </svg>
                   </span>
-                  <h3 className="mt-6 text-title text-white">{capability.title}</h3>
-                  <p className="u-pretty mt-3 text-[15px] leading-relaxed text-white/50">
+                  <h3 className="mt-6 text-title text-ink">{capability.title}</h3>
+                  <p className="u-pretty mt-3 text-[15px] leading-relaxed text-body">
                     {capability.body}
                   </p>
                 </div>

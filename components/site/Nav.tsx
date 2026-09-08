@@ -26,7 +26,7 @@ const NAV_HEIGHT = 64;
  */
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
-  const [onLight, setOnLight] = useState(false);
+  const [onLight, setOnLight] = useState(true);
 
   useEffect(() => {
     const sentinel = document.createElement("div");
@@ -89,16 +89,18 @@ export function Nav() {
     };
   }, []);
 
+  // The page is white, so light is the default treatment; the inversion is
+  // there for the dark footer panel and anything dark added later.
   const surface = !scrolled
     ? "border-transparent bg-transparent"
     : onLight
-      ? "border-black/8 bg-white/70 backdrop-blur-xl backdrop-saturate-150"
-      : "border-white/8 bg-black/60 backdrop-blur-xl backdrop-saturate-150";
+      ? "border-line bg-white/80 backdrop-blur-xl backdrop-saturate-150"
+      : "border-white/10 bg-ink/70 backdrop-blur-xl backdrop-saturate-150";
 
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,color] duration-500 ${surface} ${
-        onLight && scrolled ? "text-black" : "text-white"
+        onLight ? "text-ink" : "text-white"
       }`}
     >
       <nav className="u-shell flex h-14 items-center justify-between sm:h-16" aria-label="Primary">
@@ -106,15 +108,15 @@ export function Nav() {
           <svg viewBox="0 0 24 24" className="size-[22px]" aria-hidden="true">
             <defs>
               <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#2997ff" />
-                <stop offset="100%" stopColor="#0071e3" />
+                <stop offset="0%" stopColor="#1c6ef2" />
+                <stop offset="100%" stopColor="#7c5cf5" />
               </linearGradient>
             </defs>
             <path
               d="M12 1.6c5.74 0 10.4 4.66 10.4 10.4S17.74 22.4 12 22.4 1.6 17.74 1.6 12 6.26 1.6 12 1.6Zm0 4.2a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4Z"
               fill="url(#mark)"
             />
-            <circle cx="12" cy="12" r="2.6" fill="#2997ff" />
+            <circle cx="12" cy="12" r="2.6" fill="#1c6ef2" />
           </svg>
           Digilabss
         </a>
@@ -125,9 +127,7 @@ export function Nav() {
               <a
                 href={link.href}
                 className={`text-[13px] font-medium transition-colors duration-300 ${
-                  onLight && scrolled
-                    ? "text-black/60 hover:text-black"
-                    : "text-white/60 hover:text-white"
+                  onLight ? "text-body hover:text-ink" : "text-white/70 hover:text-white"
                 }`}
               >
                 {link.label}
@@ -140,10 +140,10 @@ export function Nav() {
           href="#book"
           onClick={() => trackCtaClick("nav", "Book a call")}
           className={`rounded-full px-4 py-2 text-[13px] font-semibold transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:px-5 ${
-            onLight && scrolled ? "bg-black text-white" : "bg-white text-black"
+            onLight ? "bg-ink text-white" : "bg-white text-ink"
           }`}
         >
-          Book a call
+          Let&rsquo;s talk
         </a>
       </nav>
     </header>

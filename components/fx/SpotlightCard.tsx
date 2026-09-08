@@ -3,11 +3,11 @@
 import { useRef, type ReactNode } from "react";
 
 /**
- * Hover effect: a soft light follows the cursor across the card.
+ * Hover effect: a soft accent light follows the cursor across the card.
  *
- * The pointer handler only writes two CSS custom properties — no React state,
- * so moving the mouse never re-renders anything. Reads are batched into a rAF
- * so a fast pointer can't thrash layout. Touch devices simply never fire it.
+ * The pointer handler only writes CSS custom properties — no React state, so
+ * moving the mouse never re-renders anything. Reads are batched into a rAF so a
+ * fast pointer can't thrash layout. Touch devices never fire it.
  */
 export function SpotlightCard({
   children,
@@ -45,7 +45,7 @@ export function SpotlightCard({
       ref={ref}
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
-      className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] transition-colors duration-500 hover:border-white/20 ${className}`}
+      className={`group relative overflow-hidden rounded-3xl border border-line bg-white transition-[border-color,box-shadow,transform] duration-500 hover:-translate-y-1 hover:border-accent-line hover:shadow-[0_24px_50px_-24px_rgba(11,13,18,0.22)] ${className}`}
       style={{ ["--spot-opacity" as string]: "0" }}
     >
       <div
@@ -53,7 +53,7 @@ export function SpotlightCard({
         className="pointer-events-none absolute inset-0 opacity-[var(--spot-opacity)] transition-opacity duration-300"
         style={{
           background:
-            "radial-gradient(260px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(41,151,255,0.16), transparent 68%)",
+            "radial-gradient(280px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(28,110,242,0.09), transparent 70%)",
         }}
       />
       <div className="relative">{children}</div>

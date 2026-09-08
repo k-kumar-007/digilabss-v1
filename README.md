@@ -1,7 +1,9 @@
 # Digilabss — Apple-style one-page landing
 
 A single-scroll, Apple-inspired landing page for a Meta Ads service, built for
-the Digilabss screening assignment.
+the Digilabss screening assignment. Light, white-surface design centred on an
+animated **Meta Ads command centre** that walks itself through twelve dashboard
+panels.
 
 > **Demo build.** The brand, copy, figures and testimonials are placeholders for
 > a screening exercise. Nothing here describes a real service.
@@ -16,15 +18,18 @@ the Digilabss screening assignment.
 Lighthouse, mobile emulation, against a local production build (`next build` +
 `next start`):
 
-| Category | Score |
-| --- | --- |
-| Performance | **99** |
-| Accessibility | **100** |
-| Best Practices | **100** |
-| SEO | **100** |
+| Category | Mobile | Desktop |
+| --- | --- | --- |
+| Performance | **99** | **100** |
+| Accessibility | **100** | **100** |
+| Best Practices | **100** | **100** |
+| SEO | **100** | **100** |
 
-Core Web Vitals from the same run: **LCP 2.2 s · CLS 0 · TBT 20 ms · FCP 0.9 s ·
-Speed Index 1.3 s.**
+Core Web Vitals from the same runs — mobile: **LCP 2.3 s · CLS 0 · TBT 10 ms ·
+FCP 0.9 s · Speed Index 1.1 s**; desktop: **LCP 0.6 s · CLS 0 · TBT 0 ms**.
+
+First-load JS is ~227 KB gzipped, almost all of it the React 19 + App Router
+baseline. The page makes **zero image or video requests**.
 
 Numbers from a hosted deployment will differ — localhost has no real network
 latency. Re-run against the live URL after deploying and update this table.
@@ -54,22 +59,40 @@ npm run build && npm start
 
 ---
 
-## The three (plus) moments of motion
+## The moments of motion
 
-The brief asked for at least three distinct moments. There are six, but only the
-first three use Framer Motion — the rest are CSS, for reasons under
-[Performance](#performance).
+The brief asked for at least three distinct moments. There are six. Framer
+Motion drives the scroll-linked and presence work; the rest is CSS, for the
+reasons under [Performance](#performance).
 
 | # | Moment | How |
 | --- | --- | --- |
-| 1 | **Hero parallax** — the console settles back and lifts as you scroll | `useScroll` + `useTransform`, `transform`/`opacity` only |
-| 2 | **Pinned story** — one sticky screen advances through three beats | `position: sticky` + scroll progress, crossfading panels |
-| 3 | **Presence** — floating CTA and the form's success state | `AnimatePresence` |
+| 1 | **Console focus sequence** — twelve panels lit one at a time, the console panning to follow | one class moved between `[data-panel]`s + a `translate3d` pan |
+| 2 | **Hero parallax** — the KPI strip settles back and lifts as you scroll | Framer Motion `useScroll` + `useTransform` |
+| 3 | **Presence** — floating CTA, and the form's success state | Framer Motion `AnimatePresence` |
 | 4 | **Scroll reveals** — every section, stat and card | one shared `IntersectionObserver` + CSS transitions |
-| 5 | **Animated background** — drifting gradient field | throttled 2D canvas, blurred up from a small buffer |
+| 5 | **Animated background** — drifting gradient wash | throttled 2D canvas, blurred up from a small buffer |
 | 6 | **Hover** — cursor-following spotlight on the capability cards | two CSS custom properties written in a rAF |
 
-Plus the chart that draws itself, the counters, and the trust marquee — all CSS.
+Plus the charts that draw themselves, the counters, the keyword highlight that
+wipes in, and the trust marquee — all CSS.
+
+### The command centre
+
+The centrepiece. A dashboard modelled on the reference, **rebuilt as native
+HTML/SVG rather than a cropped screenshot** — which is what lets it animate a
+panel at a time, stay sharp at any size, reflow to one column on a phone, and
+weigh nothing. It is also our own visual language rather than a copy of Meta's
+interface.
+
+It cycles every 2.6 s through twelve panels. For each one the panel lifts and
+takes an accent ring, the rest dim (and blur, on desktop), the canvas pans so
+the active panel sits mid-frame, and the narrative card names the metric, the
+stage of our process it belongs to, and what it means for the business. The
+twelve-segment rail is also a real tab control — click any segment to jump.
+
+The dashboard markup is a **server component** passed to the client shell as
+children, so none of it reaches the browser as JavaScript.
 
 ---
 
@@ -88,6 +111,10 @@ root toggles a single class, and CSS does the transition — then unobserves. An
 earlier Motion-based version wrapped ~30 elements in client components; this one
 ships zero JS per reveal.
 
+**The LCP element is never gated behind a reveal.** The hero's KPI numbers were
+briefly wrapped in a scroll-reveal with a stagger delay, which pinned LCP to
+hydration and cost ~0.4 s. They now inherit the parent's CSS entrance instead.
+
 **Nothing runs on scroll.** No `scroll` listeners anywhere. The nav state, the
 sticky CTA, the reveals and the section theming are all IntersectionObserver;
 the parallax and pinned story read scroll position through Motion's own
@@ -100,14 +127,21 @@ when off-screen or the tab is hidden, and never starts at all for
 `prefers-reduced-motion`, `Save-Data`, ≤4 cores, or ≤4GB RAM. Those devices get
 the static gradient underneath, which is what is server-rendered anyway.
 
-**No image or video files.** Every visual is SVG, CSS or canvas. The only binary
-the page downloads is one 47 KB subset of Inter, self-hosted by `next/font` and
-preloaded.
+**No image or video files.** Every visual is SVG, CSS or canvas — including the
+whole dashboard. The only binary the page downloads is one 47 KB subset of Inter,
+self-hosted by `next/font` and preloaded.
 
-**Layout shift is zero by construction.** The chart has a fixed
-`aspect-ratio`; form error messages sit in reserved space; the counters are
-`tabular-nums` and server-render their final value; the story panels are stacked
-in one grid cell so swapping them cannot reflow.
+**The console sequence is throttled and gated.** It only runs while the section
+is on screen and the tab is visible. The depth-of-field blur is dropped below
+1024px and on low-power devices — blurring eleven panels every 2.6 s is the one
+effect here expensive enough to cost frames on a phone, and dimming alone reads
+as focus at that size.
+
+**Layout shift is zero by construction.** Charts have a fixed `aspect-ratio`;
+form error messages sit in reserved space; the counters are `tabular-nums` and
+server-render their final value; the console's narrative card reserves height so
+swapping captions cannot resize it; the console frame is a fixed-height window,
+so panning moves nothing outside it.
 
 **Reduced motion is honoured properly** — `MotionConfig reducedMotion="user"`
 for Motion, a media query that neutralises every keyframe and transition for the
@@ -176,8 +210,9 @@ window.fbq.queue
 Keyboard-reachable throughout with a skip link and visible focus rings; the form
 labels every field, sets `aria-invalid` / `aria-describedby`, moves focus to the
 first invalid field on submit, and announces success via `role="status"`. Budget
-is a real `radiogroup`. All text meets WCAG AA contrast (this cost some of the
-very low-opacity greys, and was worth it). Lighthouse accessibility: 100.
+is a real `radiogroup`, and the console's step rail is a real `tablist`. All text
+meets WCAG AA contrast — this cost the low-opacity greys and forced the positive
+green from `#0b8f6c` (4.06:1) to `#0a7f61`. Lighthouse accessibility: 100.
 
 ---
 
@@ -215,10 +250,12 @@ app/
   globals.css         design tokens + the CSS reveal system
   api/lead/route.ts   dummy CRM endpoint
 components/
-  site/               page sections
+  site/               page sections (incl. MetaAdsConsole, the animation shell)
   fx/                 Reveal, RevealObserver, Aurora, Counter, SpotlightCard
-  visuals/            the SVG/CSS "product" panels
-lib/                  analytics, validation, motion constants, device profile
+  visuals/
+    KpiStrip.tsx      the hero's product shot
+    dashboard/        the command centre — canvas markup + its data
+lib/                  analytics, validation, chart maths, device profile
 ```
 
 See [STRATEGY.md](STRATEGY.md) for the 300-word strategy note.

@@ -106,20 +106,20 @@ export function BookACall() {
   };
 
   return (
-    <section id="book" data-nav-theme="dark" className="relative isolate overflow-hidden bg-ink py-24 sm:py-32">
-      <Aurora intensity={0.55} />
+    <section id="book" data-nav-theme="light" className="relative isolate overflow-hidden bg-white py-24 sm:py-32">
+      <Aurora intensity={0.5} />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(100%_70%_at_50%_50%,transparent_20%,rgba(0,0,0,0.7)_75%,#000_100%)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-white"
       />
 
       <div className="u-shell relative z-10 grid gap-14 lg:grid-cols-[0.95fr_1fr] lg:items-start lg:gap-20">
         <Reveal>
-          <p className="text-eyebrow uppercase text-white/55">Book a call</p>
-          <h2 className="u-balance mt-4 max-w-[13ch] text-headline text-white">
-            Start with the audit.
+          <p className="u-eyebrow">Book a call</p>
+          <h2 className="u-balance mt-4 max-w-[14ch] text-headline text-ink">
+            Start with the <span className="u-mark">free audit</span>.
           </h2>
-          <p className="u-pretty mt-6 max-w-[42ch] text-lede text-white/55">
+          <p className="u-pretty mt-6 max-w-[42ch] text-lede text-body">
             Thirty minutes, your account open on the screen. You leave with the
             three things costing you the most — whether or not we work together.
           </p>
@@ -130,10 +130,10 @@ export function BookACall() {
               "A written teardown within 72 hours",
               "Month-to-month after the first 90 days",
             ].map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[15px] text-white/60">
+              <li key={item} className="flex items-start gap-3 text-[15px] text-body">
                 <svg
                   viewBox="0 0 24 24"
-                  className="mt-0.5 size-4 shrink-0 text-[#2997ff]"
+                  className="mt-0.5 size-4 shrink-0 text-accent"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2.4"
@@ -150,7 +150,7 @@ export function BookACall() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="relative rounded-[26px] border border-white/12 bg-black/45 p-6 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.9)] backdrop-blur-2xl sm:p-8">
+          <div className="relative rounded-[26px] border border-line bg-white p-6 shadow-[0_2px_4px_rgba(11,13,18,0.04),0_40px_90px_-40px_rgba(11,13,18,0.3)] sm:p-8">
             <AnimatePresence mode="wait" initial={false}>
               {status === "success" ? (
                 <m.div
@@ -163,7 +163,7 @@ export function BookACall() {
                   role="status"
                   aria-live="polite"
                 >
-                  <span className="mx-auto grid size-14 place-items-center rounded-full bg-emerald-400/12 text-emerald-300 ring-1 ring-inset ring-emerald-400/25">
+                  <span className="mx-auto grid size-14 place-items-center rounded-full bg-[#e4f7f1] text-[#0a7f61] ring-1 ring-inset ring-[#bfe9da]">
                     <svg
                       viewBox="0 0 24 24"
                       className="size-6"
@@ -177,14 +177,14 @@ export function BookACall() {
                       <path d="m5 13 4 4L19 7" />
                     </svg>
                   </span>
-                  <h3 className="mt-6 text-title text-white">You&rsquo;re on the list.</h3>
-                  <p className="mx-auto mt-3 max-w-[34ch] text-[15px] leading-relaxed text-white/55">
-                    Check <span className="text-white/80">{values.email}</span> — the
+                  <h3 className="mt-6 text-title text-ink">You&rsquo;re on the list.</h3>
+                  <p className="mx-auto mt-3 max-w-[34ch] text-[15px] leading-relaxed text-body">
+                    Check <span className="font-medium text-ink">{values.email}</span> — the
                     invite and a short intake form are on their way.
                   </p>
-                  <p className="mt-6 text-[12px] text-white/55">
+                  <p className="mt-6 text-[12px] text-muted">
                     Demo build: the submission was logged server-side and a
-                    <code className="mx-1 rounded bg-white/8 px-1.5 py-0.5">generate_lead</code>
+                    <code className="mx-1 rounded bg-surface px-1.5 py-0.5 text-accent-ink">generate_lead</code>
                     event pushed to the dataLayer.
                   </p>
                 </m.div>
@@ -234,7 +234,7 @@ export function BookACall() {
 
                   {/* Budget as a radio group: one tap on mobile, no select sheet. */}
                   <fieldset>
-                    <legend className="text-[13px] font-medium text-white/70">
+                    <legend className="text-[13px] font-medium text-ink">
                       Monthly ad budget
                     </legend>
                     <div
@@ -262,8 +262,8 @@ export function BookACall() {
                             }}
                             className={`rounded-xl border px-3 py-3 text-[13px] font-medium transition-colors duration-200 ${
                               selected
-                                ? "border-[#2997ff] bg-[#2997ff]/12 text-white"
-                                : "border-white/12 bg-white/[0.03] text-white/60 hover:border-white/25 hover:text-white/85"
+                                ? "border-accent bg-accent-soft text-accent-ink"
+                                : "border-line bg-white text-body hover:border-line-strong hover:text-ink"
                             }`}
                           >
                             {BUDGET_LABEL[budget]}
@@ -272,7 +272,7 @@ export function BookACall() {
                       })}
                     </div>
                     {touched.budget && errors.budget && (
-                      <p id="error-budget" className="mt-2 text-[12px] text-red-400">
+                      <p id="error-budget" className="mt-2 text-[12px] text-red-600">
                         {errors.budget}
                       </p>
                     )}
@@ -302,7 +302,7 @@ export function BookACall() {
                   />
 
                   {serverError && (
-                    <p role="alert" className="text-[13px] text-red-400">
+                    <p role="alert" className="text-[13px] text-red-600">
                       {serverError}
                     </p>
                   )}
@@ -310,12 +310,12 @@ export function BookACall() {
                   <button
                     type="submit"
                     disabled={status === "submitting"}
-                    className="w-full rounded-full bg-white px-6 py-3.5 text-[15px] font-semibold text-black transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="w-full rounded-full bg-ink px-6 py-3.5 text-[15px] font-semibold text-white shadow-[0_12px_30px_-12px_rgba(11,13,18,0.5)] transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {status === "submitting" ? "Sending…" : "Book my audit call"}
+                    {status === "submitting" ? "Sending…" : "Book my free audit"}
                   </button>
 
-                  <p className="text-center text-[12px] leading-relaxed text-white/55">
+                  <p className="text-center text-[12px] leading-relaxed text-muted">
                     We reply within one business day. No sequences, no reselling
                     your details.
                   </p>
@@ -374,8 +374,8 @@ function Field({
     onBlur,
     "aria-invalid": Boolean(error),
     "aria-describedby": describedBy,
-    className: `w-full rounded-xl border bg-white/[0.05] px-4 py-3 text-[15px] text-white placeholder:text-white/55 outline-none transition-colors duration-200 focus:border-[#2997ff] focus:bg-white/[0.06] ${
-      error ? "border-red-400/60" : "border-white/12 hover:border-white/22"
+    className: `w-full rounded-xl border bg-surface-2 px-4 py-3 text-[15px] text-ink placeholder:text-muted outline-none transition-colors duration-200 focus:border-accent focus:bg-white ${
+      error ? "border-red-500" : "border-line hover:border-line-strong"
     }`,
   };
 
@@ -383,10 +383,10 @@ function Field({
     <div>
       <label
         htmlFor={`field-${id}`}
-        className="flex items-baseline justify-between text-[13px] font-medium text-white/70"
+        className="flex items-baseline justify-between text-[13px] font-medium text-ink"
       >
         {label}
-        {optional && <span className="text-[12px] text-white/55">Optional</span>}
+        {optional && <span className="text-[12px] text-muted">Optional</span>}
       </label>
 
       <div className="mt-2.5">
@@ -400,7 +400,7 @@ function Field({
       {/* Reserved space, so an appearing error never pushes the form around. */}
       <p
         id={describedBy}
-        className={`mt-1.5 min-h-[1rem] text-[12px] text-red-400 transition-opacity duration-200 ${
+        className={`mt-1.5 min-h-[1rem] text-[12px] text-red-600 transition-opacity duration-200 ${
           error ? "opacity-100" : "opacity-0"
         }`}
       >

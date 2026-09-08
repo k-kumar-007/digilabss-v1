@@ -3,28 +3,27 @@
 **How the full service story fits on one page, the Apple way.**
 
 Apple product pages work because they argue in one direction and trust a single
-idea per screen. I built the page as one continuous argument — what it is, why
-it matters, what you get, proof, how to start, the ask — giving each beat one
-headline and one supporting line. Nothing gets a paragraph.
+idea per screen. I built the page as one continuous argument — the claim, how we
+work, the numbers, what you get, proof, the ask — giving each beat one headline
+and one supporting line. Nothing gets a paragraph.
 
 **What I cut.** The agency furniture: About, a team grid, a nine-tile services
-list, pricing, an FAQ, a logo wall. Most of it repeats the pitch or asks the
-visitor to do work. Six capabilities survived as one line each; the rest was
-folded into the approach or deleted.
+list, pricing, an FAQ, a logo wall. Six capabilities survived as one line each.
+I also cut the written "our approach" section — the command centre makes that
+argument visually, and keeping both said the same thing twice.
 
-**What became a visual.** The methodology — normally three paragraphs on
-creative testing and attribution — is now a pinned scroll sequence where the
-copy advances against a changing panel: a creative pipeline, a measurement
-stack, a compounding revenue chart. Results are counters that animate on entry
-rather than a table. The hero's claim is carried by a live "campaign console"
-instead of a screenshot. The visual makes the point; the text only names it.
+**What became a visual.** The centrepiece is a Meta Ads command centre that
+walks itself through twelve panels — spend, revenue, results, reach, clicks,
+cost per result, trend, campaigns, creative, key metrics, audience, objectives.
+Each lifts into focus while the rest dim and the console pans to follow, with one
+line on what that metric means for the business. It replaces a page of copy about
+analysis and optimisation, and shows the expertise instead of claiming it.
 
-**How it stays fast.** Every visual is SVG, CSS, or canvas — no photography, no
-video files — so the media-heavy look costs kilobytes, stays sharp at any size,
-and adds nothing to the JS bundle. The hero headline is the LCP element and
-animates via a CSS keyframe, not JS, so it paints with the HTML instead of
-waiting for hydration. Thirty-odd scroll reveals share one IntersectionObserver
-toggling a class; Framer Motion is reserved for the three moments that need it.
-The animated background renders into a 300px canvas blurred up to full size,
-capped at 30fps, paused off-screen, and never started on reduced-motion or
-low-power devices.
+**How it stays fast.** Every visual is HTML, SVG or canvas — no screenshots, no
+video, zero image requests — so the dashboard stays sharp at any size, animatable
+a panel at a time. The console renders on the server and is handed to the
+animation shell as children, so twelve animated panels add no JavaScript. The focus effect is one class moved between elements plus composited
+`opacity`, `transform` and a `translate3d` pan. Thirty-odd scroll reveals share a
+single IntersectionObserver. The depth-of-field blur is dropped below desktop and
+on low-power devices, the sequence pauses off-screen, and reduced motion disables
+it, leaving the console fully lit.

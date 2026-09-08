@@ -1,18 +1,18 @@
 export function Footer() {
   return (
-    <footer className="border-t border-white/8 bg-ink py-14">
+    <footer data-nav-theme="dark" className="bg-ink py-16 text-white">
       <div className="u-shell">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-[15px] font-semibold tracking-tight text-white">Digilabss</p>
-            <p className="mt-2 max-w-[38ch] text-[13px] leading-relaxed text-white/55">
+            <p className="text-[17px] font-semibold tracking-tight text-white">Digilabss</p>
+            <p className="mt-2 max-w-[40ch] text-[14px] leading-relaxed text-white/60">
               Meta Ads for Tier 1 brands. Creative volume, clean signal, and a
               weekly operating rhythm.
             </p>
           </div>
 
           <nav aria-label="Footer">
-            <ul className="flex flex-wrap gap-x-7 gap-y-3 text-[13px] text-white/60">
+            <ul className="flex flex-wrap gap-x-7 gap-y-3 text-[14px] text-white/60">
               {[
                 { href: "#approach", label: "Approach" },
                 { href: "#results", label: "Results" },
@@ -33,7 +33,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="u-hairline my-10 text-white" />
+        <div className="my-10 h-px bg-white/10" />
 
         <div className="flex flex-col gap-3 text-[12px] text-white/55 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Digilabss. Demo build, not a real service.</p>

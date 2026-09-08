@@ -15,11 +15,13 @@ type Blob = {
   alpha: number;
 };
 
+// Tuned for a white page: low-alpha tints rather than glows. Overlaps blend
+// normally (source-over) — additive blending on white just washes to white.
 const BLOBS: Blob[] = [
-  { hue: 211, radius: 0.62, ax: 0.22, ay: 0.16, fx: 0.049, fy: 0.037, phase: 0.0, alpha: 0.58 },
-  { hue: 196, radius: 0.5, ax: 0.28, ay: 0.2, fx: 0.031, fy: 0.055, phase: 1.9, alpha: 0.46 },
-  { hue: 234, radius: 0.56, ax: 0.19, ay: 0.24, fx: 0.041, fy: 0.027, phase: 3.4, alpha: 0.4 },
-  { hue: 18, radius: 0.34, ax: 0.24, ay: 0.14, fx: 0.023, fy: 0.045, phase: 5.1, alpha: 0.2 },
+  { hue: 217, radius: 0.60, ax: 0.22, ay: 0.16, fx: 0.049, fy: 0.037, phase: 0.0, alpha: 0.10 },
+  { hue: 195, radius: 0.50, ax: 0.28, ay: 0.20, fx: 0.031, fy: 0.055, phase: 1.9, alpha: 0.07 },
+  { hue: 255, radius: 0.54, ax: 0.19, ay: 0.24, fx: 0.041, fy: 0.027, phase: 3.4, alpha: 0.07 },
+  { hue: 28, radius: 0.34, ax: 0.24, ay: 0.14, fx: 0.023, fy: 0.045, phase: 5.1, alpha: 0.04 },
 ];
 
 /** Internal buffer width. The canvas is tiny and CSS-blurred up to full size. */
@@ -85,7 +87,6 @@ export function Aurora({
 
       const t = time / 1000;
       ctx.clearRect(0, 0, width, height);
-      ctx.globalCompositeOperation = "lighter";
 
       for (const blob of BLOBS) {
         const cx = width * (0.5 + blob.ax * Math.sin(t * blob.fx * Math.PI * 2 + blob.phase));
@@ -94,9 +95,9 @@ export function Aurora({
 
         const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
         const alpha = blob.alpha * intensity;
-        gradient.addColorStop(0, `hsla(${blob.hue}, 92%, 62%, ${alpha})`);
-        gradient.addColorStop(0.45, `hsla(${blob.hue}, 90%, 52%, ${alpha * 0.42})`);
-        gradient.addColorStop(1, `hsla(${blob.hue}, 88%, 46%, 0)`);
+        gradient.addColorStop(0, `hsla(${blob.hue}, 95%, 62%, ${alpha})`);
+        gradient.addColorStop(0.45, `hsla(${blob.hue}, 92%, 66%, ${alpha * 0.45})`);
+        gradient.addColorStop(1, `hsla(${blob.hue}, 90%, 70%, 0)`);
 
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -104,7 +105,6 @@ export function Aurora({
         ctx.fill();
       }
 
-      ctx.globalCompositeOperation = "source-over";
     };
 
     const observer = new IntersectionObserver(
@@ -151,9 +151,9 @@ export function Aurora({
         className="absolute inset-0 opacity-90"
         style={{
           backgroundImage:
-            "radial-gradient(58% 44% at 22% 26%, rgba(41,151,255,0.30) 0%, rgba(41,151,255,0) 62%)," +
-            "radial-gradient(52% 40% at 78% 34%, rgba(0,193,255,0.22) 0%, rgba(0,193,255,0) 60%)," +
-            "radial-gradient(64% 52% at 50% 88%, rgba(88,86,214,0.24) 0%, rgba(88,86,214,0) 66%)",
+            "radial-gradient(58% 44% at 20% 22%, rgba(28,110,242,0.07) 0%, rgba(28,110,242,0) 62%)," +
+            "radial-gradient(52% 40% at 82% 30%, rgba(15,177,133,0.05) 0%, rgba(15,177,133,0) 60%)," +
+            "radial-gradient(64% 52% at 50% 92%, rgba(124,92,245,0.06) 0%, rgba(124,92,245,0) 66%)",
         }}
       />
 
@@ -164,12 +164,19 @@ export function Aurora({
         style={{ filter: "blur(46px) saturate(135%)", transform: "scale(1.18)" }}
       />
 
-      {/* Fine grain — kills gradient banding and reads as film, costs one tiled PNG-less SVG. */}
+      {/*
+        A very faint dot grid. On a dark page film grain reads as texture; on
+        white it just reads as dirt, so this is the light-surface equivalent —
+        it gives the gradient something to sit on without adding noise.
+      */}
       <div
-        className="absolute inset-0 opacity-[0.16] mix-blend-overlay"
+        className="absolute inset-0 opacity-[0.5]"
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E\")",
+            "radial-gradient(circle at 1px 1px, rgba(11,13,18,0.055) 1px, transparent 0)",
+          backgroundSize: "26px 26px",
+          maskImage: "radial-gradient(70% 60% at 50% 40%, #000 0%, transparent 78%)",
+          WebkitMaskImage: "radial-gradient(70% 60% at 50% 40%, #000 0%, transparent 78%)",
         }}
       />
     </div>
