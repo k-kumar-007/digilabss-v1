@@ -1,7 +1,5 @@
 import { Nav } from "@/components/site/Nav";
 import { HeroVideo } from "@/components/site/HeroVideo";
-import { Banner } from "@/components/site/Banner";
-import { KpiSnapshot } from "@/components/site/KpiSnapshot";
 import { TrustBar } from "@/components/site/TrustBar";
 import { MetaAdsConsole } from "@/components/site/MetaAdsConsole";
 import { DashboardCanvas } from "@/components/visuals/dashboard/DashboardCanvas";
@@ -17,9 +15,13 @@ import { StickyCTA } from "@/components/site/StickyCTA";
  * One page, one scroll.
  *
  * The order is the argument: the brand film (the opening frame, and nothing
- * else) → the claim in words → the proof it works, one metric at a time (the
- * snapshot) → how we actually work, shown rather than told (the command
- * centre) → the numbers → what you get → proof → how to start → the ask.
+ * else) → how we actually work, shown rather than told (the command centre) →
+ * the numbers → what you get → proof → how to start → the ask.
+ *
+ * Note: the film carries the headline, so the page currently has no `<h1>` and
+ * the words "Ad spend that pays for itself" exist only as pixels inside a
+ * video. `Banner` (which held the h1) and `KpiSnapshot` are still in
+ * `components/site/` and can be dropped back into `<main>` to restore both.
  */
 export default function Page() {
   return (
@@ -27,8 +29,6 @@ export default function Page() {
       <Nav />
       <main>
         <HeroVideo />
-        <Banner />
-        <KpiSnapshot />
         <TrustBar />
 
         {/*
