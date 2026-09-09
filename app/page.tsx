@@ -1,5 +1,6 @@
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
+import { KpiSnapshot } from "@/components/site/KpiSnapshot";
 import { TrustBar } from "@/components/site/TrustBar";
 import { MetaAdsConsole } from "@/components/site/MetaAdsConsole";
 import { DashboardCanvas } from "@/components/visuals/dashboard/DashboardCanvas";
@@ -14,9 +15,10 @@ import { StickyCTA } from "@/components/site/StickyCTA";
 /**
  * One page, one scroll.
  *
- * The order is the argument: the claim (hero) → how we actually work, shown
- * rather than told (the command centre) → the numbers → what you get → proof →
- * how to start → the ask.
+ * The order is the argument: the claim (hero, alone in the opening frame) →
+ * the proof it works, one metric at a time (the snapshot) → how we actually
+ * work, shown rather than told (the command centre) → the numbers → what you
+ * get → proof → how to start → the ask.
  */
 export default function Page() {
   return (
@@ -24,6 +26,7 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
+        <KpiSnapshot />
         <TrustBar />
 
         {/*

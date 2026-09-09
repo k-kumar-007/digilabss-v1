@@ -1,12 +1,23 @@
 /** Every number the console renders, in one place. */
 
+/**
+ * Each metric carries its own colour, chosen for what the number *means*
+ * rather than for variety: budget deployed is blue, money earned is green,
+ * customers won is violet, audience reached is amber, traffic is cyan, and
+ * cost efficiency is rose. The hero snapshot leans on these when it walks
+ * through the metrics; the console keeps the calmer `tone` grouping so its
+ * twelve-panel sequence stays readable.
+ *
+ * All six clear WCAG AA on white (4.69:1 – 5.87:1), because they are used as
+ * value text and not only as decoration.
+ */
 export const KPIS = [
-  { id: "spend", label: "Total Ad Spend", value: "$1,542.65", delta: "12.5%", up: true, tone: "blue" },
-  { id: "revenue", label: "Total Revenue", value: "$8,372.40", delta: "18.2%", up: true, tone: "teal" },
-  { id: "results", label: "Purchases / Leads", value: "1,482", delta: "21.4%", up: true, tone: "violet" },
-  { id: "reach", label: "Reach", value: "432,000", delta: "9.8%", up: true, tone: "amber" },
-  { id: "clicks", label: "Link Clicks", value: "12,546", delta: "16.7%", up: true, tone: "blue" },
-  { id: "cpr", label: "Cost per Result", value: "$0.96", delta: "11.3%", up: false, tone: "teal" },
+  { id: "spend", label: "Total Ad Spend", value: "$1,542.65", delta: "12.5%", up: true, tone: "blue", accent: "#1c6ef2" },
+  { id: "revenue", label: "Total Revenue", value: "$8,372.40", delta: "18.2%", up: true, tone: "teal", accent: "#0a7f61" },
+  { id: "results", label: "Purchases / Leads", value: "1,482", delta: "21.4%", up: true, tone: "violet", accent: "#6a49e8" },
+  { id: "reach", label: "Reach", value: "432,000", delta: "9.8%", up: true, tone: "amber", accent: "#a35f00" },
+  { id: "clicks", label: "Link Clicks", value: "12,546", delta: "16.7%", up: true, tone: "blue", accent: "#0e7490" },
+  { id: "cpr", label: "Cost per Result", value: "$0.96", delta: "11.3%", up: false, tone: "teal", accent: "#c2185b" },
 ] as const;
 
 export const TREND = {

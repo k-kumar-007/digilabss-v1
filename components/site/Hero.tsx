@@ -1,6 +1,4 @@
 import dynamic from "next/dynamic";
-import { KpiStrip } from "@/components/visuals/KpiStrip";
-import { HeroConsoleParallax } from "@/components/site/HeroConsoleParallax";
 import { HeroCta } from "@/components/site/HeroCta";
 
 // The animated background is the only thing on this screen that needs JS to
@@ -8,7 +6,12 @@ import { HeroCta } from "@/components/site/HeroCta";
 const Aurora = dynamic(() => import("@/components/fx/Aurora").then((m) => m.Aurora));
 
 /**
- * Opening frame.
+ * Opening frame — the headline, the promise, the two actions, and nothing else.
+ *
+ * The performance panel used to sit inside this section and crept into the
+ * first viewport on taller screens. It now lives in its own band below, so the
+ * opening frame is one idea on every device and the panel is something you
+ * scroll to find.
  *
  * The headline is plain server-rendered HTML animated with a CSS keyframe, not
  * a Motion component. That is deliberate: it is the LCP element, and a
@@ -54,16 +57,6 @@ export function Hero() {
 
         <div className="a-rise mt-9" style={{ animationDelay: "320ms" }}>
           <HeroCta />
-        </div>
-
-        {/* Product shot. Aspect is reserved before paint, so it cannot shift. */}
-        <div
-          className="a-rise mx-auto mt-14 max-w-[1000px] sm:mt-16"
-          style={{ animationDelay: "400ms" }}
-        >
-          <HeroConsoleParallax>
-            <KpiStrip />
-          </HeroConsoleParallax>
         </div>
       </div>
 
