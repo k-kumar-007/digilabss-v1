@@ -150,7 +150,7 @@ export function BookACall() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="relative rounded-[26px] border border-line bg-white p-6 shadow-[0_2px_4px_rgba(11,13,18,0.04),0_40px_90px_-40px_rgba(11,13,18,0.3)] sm:p-8">
+          <div className="relative overflow-hidden rounded-[22px] border border-line bg-white p-5 shadow-[0_2px_4px_rgba(11,13,18,0.04),0_40px_90px_-40px_rgba(11,13,18,0.3)] sm:p-6">
             <AnimatePresence mode="wait" initial={false}>
               {status === "success" ? (
                 <m.div
@@ -195,18 +195,33 @@ export function BookACall() {
                   noValidate
                   initial={false}
                   exit={{ opacity: 0 }}
-                  className="space-y-5"
+                  className="space-y-3.5"
                 >
-                  <Field
-                    id="name"
-                    label="Full name"
-                    autoComplete="name"
-                    placeholder="Jordan Reyes"
-                    value={values.name}
-                    error={touched.name ? errors.name : undefined}
-                    onChange={(value) => update("name", value)}
-                    onBlur={() => blur("name")}
-                  />
+                  {/* Two short fields share a row; email gets the full width
+                      because addresses are long and truncation looks broken. */}
+                  <div className="grid gap-3.5 sm:grid-cols-2">
+                    <Field
+                      id="name"
+                      label="Full name"
+                      autoComplete="name"
+                      placeholder="Jordan Reyes"
+                      value={values.name}
+                      error={touched.name ? errors.name : undefined}
+                      onChange={(value) => update("name", value)}
+                      onBlur={() => blur("name")}
+                    />
+
+                    <Field
+                      id="company"
+                      label="Company"
+                      autoComplete="organization"
+                      placeholder="Company Inc."
+                      value={values.company}
+                      error={touched.company ? errors.company : undefined}
+                      onChange={(value) => update("company", value)}
+                      onBlur={() => blur("company")}
+                    />
+                  </div>
 
                   <Field
                     id="email"
@@ -221,24 +236,20 @@ export function BookACall() {
                     onBlur={() => blur("email")}
                   />
 
-                  <Field
-                    id="company"
-                    label="Company"
-                    autoComplete="organization"
-                    placeholder="Company Inc."
-                    value={values.company}
-                    error={touched.company ? errors.company : undefined}
-                    onChange={(value) => update("company", value)}
-                    onBlur={() => blur("company")}
-                  />
-
                   {/* Budget as a radio group: one tap on mobile, no select sheet. */}
                   <fieldset>
-                    <legend className="text-[13px] font-medium text-ink">
-                      Monthly ad budget
-                    </legend>
+                    <div className="flex items-baseline justify-between gap-3">
+                      <legend className="text-[13px] font-medium text-ink">
+                        Monthly ad budget
+                      </legend>
+                      {touched.budget && errors.budget && (
+                        <span id="error-budget" className="shrink-0 text-[11px] font-medium text-red-600">
+                          {errors.budget}
+                        </span>
+                      )}
+                    </div>
                     <div
-                      className="mt-2.5 grid grid-cols-2 gap-2"
+                      className="mt-1.5 grid grid-cols-2 gap-1.5"
                       role="radiogroup"
                       aria-describedby={
                         touched.budget && errors.budget ? "error-budget" : undefined
@@ -260,7 +271,7 @@ export function BookACall() {
                               setValues(next);
                               setErrors(validateLead(next));
                             }}
-                            className={`rounded-xl border px-3 py-3 text-[13px] font-medium transition-colors duration-200 ${
+                            className={`rounded-lg border px-3 py-2.5 text-[13px] font-medium transition-colors duration-200 ${
                               selected
                                 ? "border-accent bg-accent-soft text-accent-ink"
                                 : "border-line bg-white text-body hover:border-line-strong hover:text-ink"
@@ -271,11 +282,6 @@ export function BookACall() {
                         );
                       })}
                     </div>
-                    {touched.budget && errors.budget && (
-                      <p id="error-budget" className="mt-2 text-[12px] text-red-600">
-                        {errors.budget}
-                      </p>
-                    )}
                   </fieldset>
 
                   <Field
@@ -310,9 +316,14 @@ export function BookACall() {
                   <button
                     type="submit"
                     disabled={status === "submitting"}
-                    className="w-full rounded-full bg-ink px-6 py-3.5 text-[15px] font-semibold text-white shadow-[0_12px_30px_-12px_rgba(11,13,18,0.5)] transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="group mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3 text-[15px] font-semibold text-white shadow-[0_12px_30px_-12px_rgba(11,13,18,0.5)] transition-transform duration-300 hover:scale-[1.01] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {status === "submitting" ? "Sending…" : "Book my free audit"}
+                    {status !== "submitting" && (
+                      <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5">
+                        →
+                      </span>
+                    )}
                   </button>
 
                   <p className="text-center text-[12px] leading-relaxed text-muted">
@@ -374,38 +385,44 @@ function Field({
     onBlur,
     "aria-invalid": Boolean(error),
     "aria-describedby": describedBy,
-    className: `w-full rounded-xl border bg-surface-2 px-4 py-3 text-[15px] text-ink placeholder:text-muted outline-none transition-colors duration-200 focus:border-accent focus:bg-white ${
-      error ? "border-red-500" : "border-line hover:border-line-strong"
+    className: `w-full rounded-lg border bg-surface-2 px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted outline-none transition-[border-color,background-color,box-shadow] duration-200 focus:bg-white focus:ring-4 ${
+      error
+        ? "border-red-400 focus:border-red-500 focus:ring-red-500/10"
+        : "border-line hover:border-line-strong focus:border-accent focus:ring-accent/12"
     }`,
   };
 
   return (
     <div>
-      <label
-        htmlFor={`field-${id}`}
-        className="flex items-baseline justify-between text-[13px] font-medium text-ink"
-      >
-        {label}
-        {optional && <span className="text-[12px] text-muted">Optional</span>}
-      </label>
+      {/*
+        The error sits on the label row rather than under the input. The old
+        layout reserved a permanent gutter beneath every field so an appearing
+        error could not shift the form — that gutter was most of this card's
+        dead space. Here the row height is set by the label, so the error costs
+        nothing and still cannot shift anything, provided it stays on one line.
+        That is why the validator's messages are short.
+      */}
+      <div className="flex items-baseline justify-between gap-3">
+        <label htmlFor={`field-${id}`} className="shrink-0 text-[13px] font-medium text-ink">
+          {label}
+        </label>
 
-      <div className="mt-2.5">
+        {error ? (
+          <span id={describedBy} className="min-w-0 truncate text-[11px] font-medium text-red-600">
+            {error}
+          </span>
+        ) : (
+          optional && <span className="shrink-0 text-[11px] text-muted">Optional</span>
+        )}
+      </div>
+
+      <div className="mt-1.5">
         {multiline ? (
           <textarea {...shared} rows={3} className={`${shared.className} resize-none`} />
         ) : (
           <input {...shared} type={type} inputMode={inputMode} />
         )}
       </div>
-
-      {/* Reserved space, so an appearing error never pushes the form around. */}
-      <p
-        id={describedBy}
-        className={`mt-1.5 min-h-[1rem] text-[12px] text-red-600 transition-opacity duration-200 ${
-          error ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        {error ?? " "}
-      </p>
     </div>
   );
 }

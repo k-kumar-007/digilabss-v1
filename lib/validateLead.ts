@@ -8,6 +8,10 @@ export type Errors = Partial<Record<FieldName, string>>;
 /**
  * One validator, imported by both the form and the API route.
  *
+ * Messages are deliberately short: the form shows them inline on the field's
+ * label row rather than below it, which keeps the layout compact and costs no
+ * reserved space — but only works if they fit on one line.
+ *
  * Client-side it drives inline messages; server-side it is the actual gate,
  * because anything that only runs in the browser is a suggestion, not a rule.
  */
@@ -16,34 +20,34 @@ export function validateLead(input: Partial<LeadPayload>): Errors {
 
   const name = input.name?.trim() ?? "";
   if (name.length < 2) {
-    errors.name = "Please enter your full name.";
+    errors.name = "Enter your full name";
   } else if (name.length > 80) {
-    errors.name = "That name is too long.";
+    errors.name = "Too long";
   }
 
   const email = input.email?.trim() ?? "";
   // Deliberately permissive: reject the obviously broken, never a real address.
   if (!email) {
-    errors.email = "We need an email to send the invite.";
+    errors.email = "Enter your work email";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 160) {
-    errors.email = "That doesn't look like a valid email.";
+    errors.email = "Enter a valid email";
   }
 
   const company = input.company?.trim() ?? "";
   if (company.length < 2) {
-    errors.company = "Which company are we talking about?";
+    errors.company = "Enter your company";
   } else if (company.length > 100) {
-    errors.company = "That company name is too long.";
+    errors.company = "Too long";
   }
 
   if (!input.budget) {
-    errors.budget = "Pick a range so we can prepare properly.";
+    errors.budget = "Pick a range";
   } else if (!BUDGETS.includes(input.budget)) {
-    errors.budget = "Pick one of the listed ranges.";
+    errors.budget = "Pick a listed range";
   }
 
   if (input.message && input.message.length > 1000) {
-    errors.message = "Please keep this under 1000 characters.";
+    errors.message = "Keep under 1000 characters";
   }
 
   return errors;
