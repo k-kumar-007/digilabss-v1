@@ -365,6 +365,100 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Stat cards.
+
+   Each card carries its own `--stat` colour, so one rule dresses all four. The
+   top rule wipes across as the card reveals, which gives the section a sense of
+   the numbers being drawn rather than simply appearing.
+--------------------------------------------------------------------------- */
+[data-stat-card] {
+  transition:
+    transform 0.4s var(--ease-pop),
+    border-color 0.4s var(--ease-out-quint),
+    box-shadow 0.4s var(--ease-out-quint);
+}
+
+[data-stat-rule] {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* The gauge stops at 4.8 of 6, so it sweeps to 80% rather than fully drawn. */
+[data-stat-gauge] {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+@media (scripting: enabled) {
+  [data-stat-rule] {
+    transition: transform 0.9s var(--ease-out-expo) 0.15s;
+  }
+
+  .is-visible [data-stat-rule] {
+    transform: scaleX(1);
+  }
+
+  [data-stat-gauge] {
+    transition: stroke-dashoffset 1.2s var(--ease-out-expo) 0.26s;
+  }
+
+  .is-visible [data-stat-gauge] {
+    stroke-dashoffset: 0.2;
+  }
+}
+
+@media (hover: hover) {
+  [data-stat-card]:hover {
+    transform: translate3d(0, -4px, 0);
+    border-color: color-mix(in oklab, var(--stat) 40%, transparent);
+    box-shadow:
+      0 16px 32px -14px color-mix(in oklab, var(--stat) 55%, transparent),
+      0 2px 8px -3px rgba(11, 13, 18, 0.08);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Client logo strip.
+
+   Each chip carries its own `--brand` colour, so one rule dresses all eight.
+   Hover effects are behind `@media (hover: hover)` — on touch there is no
+   hover state to leave, so without the guard a tapped chip would stay stuck in
+   its hover appearance.
+--------------------------------------------------------------------------- */
+[data-brand-chip] {
+  transition:
+    transform 0.35s var(--ease-pop),
+    border-color 0.35s var(--ease-out-quint),
+    box-shadow 0.35s var(--ease-out-quint),
+    background-color 0.35s var(--ease-out-quint);
+}
+
+[data-brand-mark] {
+  display: inline-flex;
+  transition: transform 0.4s var(--ease-pop);
+}
+
+@media (hover: hover) {
+  /* Let people stop the belt to actually read a name. */
+  [data-marquee]:hover .a-marquee {
+    animation-play-state: paused;
+  }
+
+  [data-brand-chip]:hover {
+    transform: translate3d(0, -3px, 0);
+    border-color: color-mix(in oklab, var(--brand) 45%, transparent);
+    background-color: color-mix(in oklab, var(--brand) 4%, white);
+    box-shadow:
+      0 12px 26px -12px color-mix(in oklab, var(--brand) 60%, transparent),
+      0 2px 6px -2px rgba(11, 13, 18, 0.08);
+  }
+
+  [data-brand-chip]:hover [data-brand-mark] {
+    transform: scale(1.14);
+  }
+}
+
+/* ---------------------------------------------------------------------------
    KPI snapshot spotlight.
 
    The panel below the hero walks through its six metrics one at a time. Each
@@ -537,6 +631,18 @@
 
   [data-kpi-bar] {
     transform: scaleX(0) !important;
+  }
+
+  [data-stat-rule] {
+    transform: scaleX(1) !important;
+  }
+
+  [data-stat-gauge] {
+    stroke-dashoffset: 0.2 !important;
+  }
+
+  [data-stat-card]:hover {
+    transform: none !important;
   }
 
   [data-console-canvas] {
