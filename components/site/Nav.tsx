@@ -53,6 +53,9 @@ export function Nav() {
     if (sections.length === 0) return;
 
     let observer: IntersectionObserver | null = null;
+    // Which section the bar is currently sitting on, so a live theme change on
+    // that one (and only that one) can be picked up.
+    let active: Element | null = null;
 
     // A 1px-tall detection band pinned just under the nav: whichever section
     // crosses it is the one the bar is currently sitting on.
@@ -64,6 +67,7 @@ export function Nav() {
         (entries) => {
           for (const entry of entries) {
             if (!entry.isIntersecting) continue;
+            active = entry.target;
             setOnLight(entry.target.getAttribute("data-nav-theme") === "light");
           }
         },
@@ -72,6 +76,23 @@ export function Nav() {
 
       sections.forEach((section) => observer!.observe(section));
     };
+
+    /*
+      A section can change its own theme while it is on screen — the hero film
+      does, because it opens on black and resolves to a near-white frame. An
+      IntersectionObserver only fires on crossings, so it would never see that.
+      Watching the attribute keeps the bar correct without the hero having to
+      know the nav exists.
+    */
+    const themeWatcher = new MutationObserver((records) => {
+      for (const record of records) {
+        if (record.target !== active) continue;
+        setOnLight((record.target as HTMLElement).getAttribute("data-nav-theme") === "light");
+      }
+    });
+    sections.forEach((section) =>
+      themeWatcher.observe(section, { attributes: true, attributeFilter: ["data-nav-theme"] }),
+    );
 
     let resizeTimer: ReturnType<typeof setTimeout>;
     const onResize = () => {
@@ -84,6 +105,7 @@ export function Nav() {
 
     return () => {
       observer?.disconnect();
+      themeWatcher.disconnect();
       clearTimeout(resizeTimer);
       window.removeEventListener("resize", onResize);
     };

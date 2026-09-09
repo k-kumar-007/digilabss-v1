@@ -133,10 +133,19 @@ when off-screen or the tab is hidden, and never starts at all for
 `prefers-reduced-motion`, `Save-Data`, ≤4 cores, or ≤4GB RAM. Those devices get
 the static gradient underneath, which is what is server-rendered anyway.
 
-**The brand film never blocks first paint.** The two films are ~8 MB each, so
-the `<video>` ships with no `src` at all and `preload="none"`; a source is
-attached only once the browser goes idle. LCP is therefore decided by a 21 KB
-WebP poster, delivered through a `<picture>` so phones fetch only the 9:16 crop.
+**The brand film never blocks first paint.** The `<video>` ships with no `src`
+at all and `preload="none"`; a source is attached only once the browser goes
+idle. LCP is therefore decided by a ~9 KB WebP poster, delivered through a
+`<picture>` so phones fetch only the 9:16 crop.
+
+**The nav reads the film.** The cut opens on black and resolves to a near-white
+frame halfway through, so a fixed white nav would be invisible for half the
+loop. Rather than hard-code a timestamp — which breaks silently the next time
+the edit changes — the hero samples the luminance of the top of the frame four
+times a second (a 32x6 canvas) and flips `data-nav-theme` on its own section.
+The nav watches that attribute with a MutationObserver, so neither component
+needs to know about the other. The scroll cue uses `mix-blend-mode: difference`
+and inverts itself.
 The film fades in over the poster when it can play, pauses off-screen and when
 the tab is hidden, and is never requested at all under reduced motion, Save-Data
 or on low-power devices — verified as zero `.mp4` requests, not assumed.
