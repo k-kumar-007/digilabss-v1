@@ -30,8 +30,22 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/vids/:path*",
+        // Posters carry a content hash in their filename, so the bytes behind a
+        // given URL genuinely never change and `immutable` is an honest claim.
+        source: "/vids/:file(.*\\.webp)",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        // The films keep human-readable names so a new cut can be dropped in
+        // by name — which rules out `immutable`. It promises the bytes at a URL
+        // will never change, so replacing a file in place leaves returning
+        // visitors on the old copy until the max-age expires. That is exactly
+        // what happened to a poster here. Cached hard for a day, then
+        // revalidated in the background.
+        source: "/vids/:file(.*\\.mp4)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+        ],
       },
     ];
   },

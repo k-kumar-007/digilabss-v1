@@ -163,12 +163,20 @@ export function HeroVideo() {
       className="relative isolate h-[100svh] w-full overflow-hidden bg-black"
       aria-label="Digilabss brand film"
     >
-      {/* Poster. Decorative — the film's message is written out in the section
-          below, so nothing is lost to a screen reader here. */}
+      {/*
+        Poster. Decorative — the film's message is written out in the section
+        below, so nothing is lost to a screen reader here.
+
+        The filename carries a content hash. `/vids/*.webp` is served
+        `immutable`, and `immutable` is a promise that the bytes at this URL
+        will never change — so the URL has to change when they do. Replacing a
+        poster in place under a stable name meant returning visitors kept the
+        old frame for a year. Regenerate the poster, re-hash, update here.
+      */}
       <picture>
-        <source media={MOBILE_QUERY} srcSet="/vids/hero-cut-9x16-poster.webp" />
+        <source media={MOBILE_QUERY} srcSet="/vids/hero-cut-9x16-poster.84ee2625.webp" />
         <img
-          src="/vids/hero-cut-16x9-poster.webp"
+          src="/vids/hero-cut-16x9-poster.0fbedc74.webp"
           alt=""
           aria-hidden="true"
           fetchPriority="high"
