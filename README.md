@@ -1,9 +1,9 @@
 # Digilabss — Apple-style one-page landing
 
 A single-scroll, Apple-inspired landing page for a Meta Ads service, built for
-the Digilabss screening assignment. Light, white-surface design centred on an
-animated **Meta Ads command centre** that walks itself through twelve dashboard
-panels.
+the Digilabss screening assignment. Opens on a full-viewport **brand film**,
+then a light, white-surface page centred on an animated **Meta Ads command
+centre** that walks itself through twelve dashboard panels.
 
 > **Demo build.** The brand, copy, figures and testimonials are placeholders for
 > a screening exercise. Nothing here describes a real service.
@@ -133,9 +133,17 @@ when off-screen or the tab is hidden, and never starts at all for
 `prefers-reduced-motion`, `Save-Data`, ≤4 cores, or ≤4GB RAM. Those devices get
 the static gradient underneath, which is what is server-rendered anyway.
 
-**No image or video files.** Every visual is SVG, CSS or canvas — including the
-whole dashboard. The only binary the page downloads is one 47 KB subset of Inter,
-self-hosted by `next/font` and preloaded.
+**The brand film never blocks first paint.** The two films are ~8 MB each, so
+the `<video>` ships with no `src` at all and `preload="none"`; a source is
+attached only once the browser goes idle. LCP is therefore decided by a 21 KB
+WebP poster, delivered through a `<picture>` so phones fetch only the 9:16 crop.
+The film fades in over the poster when it can play, pauses off-screen and when
+the tab is hidden, and is never requested at all under reduced motion, Save-Data
+or on low-power devices — verified as zero `.mp4` requests, not assumed.
+
+**Every other visual is SVG, CSS or canvas** — including the whole dashboard and
+all eight client logos. Apart from the film, the only binary the page downloads
+is one 47 KB subset of Inter, self-hosted by `next/font` and preloaded.
 
 **The console sequence is throttled and gated.** It only runs while the section
 is on screen and the tab is visible. The depth-of-field blur is dropped below

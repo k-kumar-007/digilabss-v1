@@ -1,5 +1,6 @@
 import { Nav } from "@/components/site/Nav";
-import { Hero } from "@/components/site/Hero";
+import { HeroVideo } from "@/components/site/HeroVideo";
+import { Banner } from "@/components/site/Banner";
 import { KpiSnapshot } from "@/components/site/KpiSnapshot";
 import { TrustBar } from "@/components/site/TrustBar";
 import { MetaAdsConsole } from "@/components/site/MetaAdsConsole";
@@ -15,17 +16,18 @@ import { StickyCTA } from "@/components/site/StickyCTA";
 /**
  * One page, one scroll.
  *
- * The order is the argument: the claim (hero, alone in the opening frame) →
- * the proof it works, one metric at a time (the snapshot) → how we actually
- * work, shown rather than told (the command centre) → the numbers → what you
- * get → proof → how to start → the ask.
+ * The order is the argument: the brand film (the opening frame, and nothing
+ * else) → the claim in words → the proof it works, one metric at a time (the
+ * snapshot) → how we actually work, shown rather than told (the command
+ * centre) → the numbers → what you get → proof → how to start → the ask.
  */
 export default function Page() {
   return (
     <>
       <Nav />
       <main>
-        <Hero />
+        <HeroVideo />
+        <Banner />
         <KpiSnapshot />
         <TrustBar />
 

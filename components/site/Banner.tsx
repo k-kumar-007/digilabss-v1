@@ -1,29 +1,28 @@
 import dynamic from "next/dynamic";
 import { HeroCta } from "@/components/site/HeroCta";
 
-// The animated background is the only thing on this screen that needs JS to
-// look right, so it is the only thing code-split out of the first payload.
+// The animated background is the only thing here that needs JS to look right,
+// so it is the only thing code-split out of the first payload.
 const Aurora = dynamic(() => import("@/components/fx/Aurora").then((m) => m.Aurora));
 
 /**
- * Opening frame — the headline, the promise, the two actions, and nothing else.
+ * The written promise, directly under the brand film.
  *
- * The performance panel used to sit inside this section and crept into the
- * first viewport on taller screens. It now lives in its own band below, so the
- * opening frame is one idea on every device and the panel is something you
- * scroll to find.
+ * This used to be the opening frame. With the film taking that slot, the
+ * headline moved here — and it is still the page's `<h1>`, so the document
+ * outline and the SEO story are unchanged; only the order on screen moved.
  *
- * The headline is plain server-rendered HTML animated with a CSS keyframe, not
- * a Motion component. That is deliberate: it is the LCP element, and a
- * JS-driven `opacity: 0 -> 1` would hold LCP hostage until React hydrates. This
- * paints on the browser's first frame.
+ * The headline animates with a CSS keyframe rather than a Motion component.
+ * That was originally to protect LCP, and it still matters: the film's poster
+ * is now the LCP element, and nothing here should be competing for the main
+ * thread while that paints.
  */
-export function Hero() {
+export function Banner() {
   return (
     <section
-      id="top"
+      id="promise"
       data-nav-theme="light"
-      className="relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-32"
+      className="relative isolate overflow-hidden py-24 text-center sm:py-32"
     >
       <Aurora />
 
@@ -33,7 +32,7 @@ export function Hero() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-white"
       />
 
-      <div className="u-shell relative z-10 text-center">
+      <div className="u-shell relative z-10">
         <p className="a-rise u-eyebrow justify-center" style={{ animationDelay: "60ms" }}>
           <span className="size-1.5 rounded-full bg-accent" />
           Digilabss · Meta Ads &amp; performance marketing
@@ -58,22 +57,6 @@ export function Hero() {
         <div className="a-rise mt-9" style={{ animationDelay: "320ms" }}>
           <HeroCta />
         </div>
-      </div>
-
-      <div
-        aria-hidden="true"
-        className="a-fade pointer-events-none absolute inset-x-0 bottom-6 z-10 flex justify-center"
-        style={{ animationDelay: "1.2s" }}
-      >
-        <svg viewBox="0 0 24 24" className="a-scroll-hint size-5 text-muted" fill="none">
-          <path
-            d="M12 4v15m0 0 6-6m-6 6-6-6"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
       </div>
     </section>
   );
