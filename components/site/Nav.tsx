@@ -26,7 +26,11 @@ const NAV_HEIGHT = 64;
  */
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
-  const [onLight, setOnLight] = useState(true);
+  // The page opens on the black brand film, so dark is the correct starting
+  // treatment. It matters before the observer has run — on the first painted
+  // frame, and for the whole session with JavaScript disabled, where a light
+  // nav left the wordmark almost invisible against the hero.
+  const [onLight, setOnLight] = useState(false);
 
   useEffect(() => {
     const sentinel = document.createElement("div");
