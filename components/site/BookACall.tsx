@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import { AnimatePresence, m } from "motion/react";
 import { Reveal } from "@/components/fx/Reveal";
+import { TeardownPreview } from "@/components/visuals/TeardownPreview";
 import { BUDGET_LABEL, trackFormError, trackFormStart, trackLeadSubmitted } from "@/lib/analytics";
 import type { BudgetRange, LeadPayload } from "@/lib/analytics";
 import { BUDGETS, validateLead, type Errors, type FieldName } from "@/lib/validateLead";
@@ -120,33 +121,13 @@ export function BookACall() {
             Start with the free audit.
           </h2>
           <p className="u-pretty mt-6 max-w-[42ch] text-lede text-body">
-            Thirty minutes, your account open on the screen. You leave with the
-            three things costing you the most — whether or not we work together.
+            Thirty minutes, your account open on the screen. Then a written
+            teardown — the three things costing you the most.
           </p>
 
-          <ul className="mt-10 space-y-3.5">
-            {[
-              "No deck, no discovery loop",
-              "A written teardown within 72 hours",
-              "Month-to-month after the first 90 days",
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[15px] text-body">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="mt-0.5 size-4 shrink-0 text-accent"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m5 13 4 4L19 7" />
-                </svg>
-                {item}
-              </li>
-            ))}
-          </ul>
+          <div className="mt-10">
+            <TeardownPreview />
+          </div>
         </Reveal>
 
         <Reveal delay={0.1}>
@@ -197,6 +178,40 @@ export function BookACall() {
                   exit={{ opacity: 0 }}
                   className="space-y-3.5"
                 >
+                  {/* A booking form with no header reads as a floating stack of
+                      inputs. This says what you are actually booking. */}
+                  <div className="flex items-center gap-3 border-b border-line pb-4">
+                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent-ink ring-1 ring-inset ring-accent-line">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="size-[18px]"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <rect x="3" y="5" width="18" height="16" rx="2.4" />
+                        <path d="M3 10h18M8 3v4M16 3v4" />
+                        <path d="m9.4 15.4 1.8 1.8 3.4-3.8" />
+                      </svg>
+                    </span>
+
+                    <div className="min-w-0">
+                      <p className="text-[14px] font-semibold tracking-tight text-ink">
+                        Free account audit
+                      </p>
+                      <p className="truncate text-[12px] text-muted">
+                        Google Meet or Zoom · no deck
+                      </p>
+                    </div>
+
+                    <span className="ml-auto shrink-0 rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] font-medium text-body">
+                      30 min
+                    </span>
+                  </div>
+
                   {/* Two short fields share a row; email gets the full width
                       because addresses are long and truncation looks broken. */}
                   <div className="grid gap-3.5 sm:grid-cols-2">
